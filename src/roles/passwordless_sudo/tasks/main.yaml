@@ -1,0 +1,8 @@
+---
+- name: Ensure {{ group_name }} can sudo without password
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%{{ group_name }}'
+    line: '%{{ group_name }} ALL=(ALL) NOPASSWD: ALL'
+    state: present
+    validate: 'visudo -cf %s'

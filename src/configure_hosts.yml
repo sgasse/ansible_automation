@@ -1,0 +1,7 @@
+---
+- hosts: raspberry_pis
+  become: true
+  roles:
+    - role: passwordless_sudo
+      vars:
+        group_name: admin
