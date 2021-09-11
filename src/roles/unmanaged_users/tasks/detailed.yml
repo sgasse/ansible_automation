@@ -1,0 +1,30 @@
+---
+- name: Get all users on the system
+  getent:
+    database: passwd
+
+- name: Create list with all user IDs
+  set_fact:
+    user_ids: "{{ getent_passwd | json_query('*[1]') | map('int') }}"
+
+- name: Create list with usernames
+  set_fact:
+    user_names: "{{ getent_passwd | json_query('keys(@)') }}"
+
+- name: Create list of users dicts
+  set_fact:
+    # to_json | from_json needed, see https://github.com/ansible/ansible/issues/27299
+    user_dict:  "{{ user_names | zip(user_ids) | to_json | from_json| json_query('[*].{\"user\": @[0], \"uid\": @[1]}') }}"
+
+- name: Select users with ids ID >= 1000
+  set_fact:
+    interesting_users: "{{ user_dict | json_query('[?uid >= `1000`].user') }}"
+
+- name: Select only users that are not supposed to be on the system
+  set_fact:
+    suspicious_users: "{{ interesting_users | reject('in', expected_users) }}"
+
+- name: List unmanaged users
+  debug:
+    msg: "User {{ item }} was found but is not managed"
+  loop: "{{ suspicious_users }}"

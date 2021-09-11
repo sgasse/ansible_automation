@@ -19,6 +19,17 @@
         user_names: "{{ admins }}"  # from host group variables in inventory
         primary_group: admin
         user_groups: "admin,docker"
+      when: admins is defined
+
+    # Developer accounts on this group of hosts
+    - name: Update developer accounts
+      include_role:
+        name: user_accounts
+      vars:
+        user_names: "{{ developers }}"  # from host group variables in inventory
+        primary_group: dev
+        user_groups: "dev"
+      when: developers is defined
 
     # Specific user accounts per host
     - name: Update local users
@@ -31,5 +42,10 @@
       with_items: "{{ local_users }}"
       loop_control:
         loop_var: outer_item  # avoid name-clash with loop in role
-        
-      
+      when: local_users is defined
+
+    - name: List unmanaged users
+      include_role:
+        name: unmanaged_users
+      vars:
+        expected_users: "{{ (admins | default([])) + (developers | default([])) + (local_users | default([]) | map(attribute='name')) }}"

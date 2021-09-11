@@ -1,0 +1,15 @@
+---
+all:
+  children:
+    raspberry_pis:
+      hosts:
+        10.0.0.1:
+          admins:
+            - simon
+          developers:
+            - alice
+            - bob
+          local_users:
+            - name: james
+              primary_group: dev
+              user_groups: dev

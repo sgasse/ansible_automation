@@ -5,3 +5,24 @@ simon:
   pw_hash: "$6$oAiiCs2e.Oazg0LR$y5/CSBNR7te39S0mTe5dRWtqafFzDwsiRCgrs9jTGTI7EX60GC/8juuKiz8N/dWF9dInGuyV1qV.Df3thSk/n1"
   authorized_keys: |
     ssh-ed25519 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA user@host
+
+james:
+  name: James
+  uid: 3000
+  pw_hash: "$6$IHYNuzHgynSmD$h4lM0Xuae7LyNCs.bY5MUabk3QiGHkW9O5YB7PJX2rlKmEji.E8refGrhnkpewUqx67fAVNH/RRmu2E3jTTq2/"
+  authorized_keys: |
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIELxYOI+mc3Jwhn/9Jckl41ALA1kvQKTaq/k4uy0lUe9 user@host
+
+alice:
+  name: Alice
+  uid: 3001
+  pw_hash: "$6$IHYNuzHgynSmD$h4lM0Xuae7LyNCs.bY5MUabk3QiGHkW9O5YB7PJX2rlKmEji.E8refGrhnkpewUqx67fAVNH/RRmu2E3jTTq2/"
+  authorized_keys: |
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIELxYOI+mc3Jwhn/9Jckl41ALA1kvQKTaq/k4uy0lUe9 user@host
+
+bob:
+  name: Bob
+  uid: 3002
+  pw_hash: "$6$IHYNuzHgynSmD$h4lM0Xuae7LyNCs.bY5MUabk3QiGHkW9O5YB7PJX2rlKmEji.E8refGrhnkpewUqx67fAVNH/RRmu2E3jTTq2/"
+  authorized_keys: |
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIELxYOI+mc3Jwhn/9Jckl41ALA1kvQKTaq/k4uy0lUe9 user@host

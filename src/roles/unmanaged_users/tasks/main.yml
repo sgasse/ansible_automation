@@ -1,0 +1,22 @@
+---
+- name: Get all users on the system
+  getent:
+    database: passwd
+
+- name: Create list with all user IDs
+  set_fact:
+    user_ids: "{{ getent_passwd | json_query('*[1]') | map('int') }}"
+
+- name: Create list with usernames
+  set_fact:
+    user_names: "{{ getent_passwd | json_query('keys(@)') }}"
+
+- name: Create list of suspicious users
+  set_fact:
+    # Long filtering, look at the detailed version to understand it
+    suspicious_users:  "{{ user_names | zip(user_ids) | to_json | from_json| json_query('[*].{\"user\": @[0], \"uid\": @[1]}') | json_query('[?uid >= `1000`].user') | reject('in', expected_users) }}"
+
+- name: List unmanaged users
+  debug:
+    msg: "User {{ item }} was found but is not managed"
+  loop: "{{ suspicious_users }}"
