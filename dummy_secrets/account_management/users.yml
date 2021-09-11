@@ -1,0 +1,7 @@
+---
+simon:
+  name: Simon
+  uid: 1234
+  pw_hash: "$6$oAiiCs2e.Oazg0LR$y5/CSBNR7te39S0mTe5dRWtqafFzDwsiRCgrs9jTGTI7EX60GC/8juuKiz8N/dWF9dInGuyV1qV.Df3thSk/n1"
+  authorized_keys: |
+    ssh-ed25519 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA user@host

@@ -1,0 +1,35 @@
+---
+- hosts: raspberry_pis
+  become: true
+  tasks:
+    - name: Load account data
+      include_vars:
+        file: '../../secrets/account_management/users.yml'
+        name: users
+
+    - name: Update groups
+      include_role:
+        name: groups
+
+    # Admin accounts on this group of hosts
+    - name: Update admin accounts
+      include_role:
+        name: user_accounts
+      vars:
+        user_names: "{{ admins }}"  # from host group variables in inventory
+        primary_group: admin
+        user_groups: "admin,docker"
+
+    # Specific user accounts per host
+    - name: Update local users
+      include_role:
+        name: user_accounts
+      vars:
+        user_names: "['{{ outer_item['name'] }}']"
+        primary_group: "{{ outer_item['primary_group'] }}"
+        user_groups: "{{ outer_item['user_groups'] }}"
+      with_items: "{{ local_users }}"
+      loop_control:
+        loop_var: outer_item  # avoid name-clash with loop in role
+        
+      

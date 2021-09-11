@@ -1,0 +1,27 @@
+---
+- name: Load account data
+  include_vars:
+    file: '../../secrets/account_management/users.yml'
+    name: users
+  when: users is not defined
+
+- name: Update user account
+  user:
+    name: "{{ item }}"
+    comment: "{{ users[item]['name'] }}"
+    uid: "{{ users[item]['uid'] }}"
+    password: "{{ users[item]['pw_hash'] }}"
+    shell: /bin/bash
+    group: "{{ primary_group }}"
+    groups: "{{ user_groups }}"
+    update_password: always
+    create_home: yes
+  loop: "{{ user_names }}"
+
+- name: Update authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ item }}"
+    key: "{{ users[item]['authorized_keys'] }}"
+    state: present
+    exclusive: True
+  loop: "{{ user_names }}"

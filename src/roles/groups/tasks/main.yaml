@@ -1,0 +1,7 @@
+---
+- name: Create groups
+  group:
+    name: "{{ item.key }}"
+    state: present
+    gid: "{{ user_groups[item.key]['gid'] }}"
+  loop: "{{ user_groups | dict2items }}"

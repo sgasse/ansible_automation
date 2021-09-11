@@ -1,0 +1,4 @@
+.venv/
+
+src/inventories/production.yml
+src/inventories/staging.yml
