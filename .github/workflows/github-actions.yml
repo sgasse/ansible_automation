@@ -1,0 +1,13 @@
+name: CI Workflow
+on: [push]
+jobs:
+  ansible-lint:
+    runs-on: ubuntu-latest
+    container:
+      image: cytopia/ansible-lint:latest
+      # https://dev.to/mihinduranasinghe/using-docker-containers-in-jobs-github-actions-3eof
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Lint ansible files
+        run: ansible-lint src
