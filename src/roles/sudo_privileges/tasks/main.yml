@@ -1,0 +1,8 @@
+---
+- name: Ensure {{ group_name }} can sudo with password
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%{{ group_name }}'
+    line: '%{{ group_name }} ALL=(ALL:ALL) ALL'
+    state: present
+    validate: 'visudo -cf %s'

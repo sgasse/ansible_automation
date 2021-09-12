@@ -2,6 +2,9 @@
 - hosts: raspberry_pis
   become: true
   roles:
-    - role: passwordless_sudo
+    - role: sudo_privileges
       vars:
         group_name: admin
+    - role: syncthing
+      vars:
+        target_user: simon

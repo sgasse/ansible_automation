@@ -1,0 +1,26 @@
+---
+- name: Ensure the syncthing key is installed
+  apt_key:
+    id: 37C84554E7E0A261E4F76E1ED26E6ED000654A3E
+    url: https://syncthing.net/release-key.gpg
+    state: present
+
+- name: Create source list for syncthing
+  copy:
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/apt/sources.list.d/syncthing.list
+    content: |
+      deb https://apt.syncthing.net/ syncthing stable
+
+- name: Install syncthing
+  apt:
+    name: syncthing
+    state: present
+    update_cache: yes
+
+- name: Ensure syncthing is running
+  systemd:
+    name: "syncthing@{{ target_user }}"
+    state: started
