@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook -u $USER -i 127.0.0.1, new_vpn_client.yml
+---
+- hosts: localhost
+  connection: local
+  roles:
+    - role: vpn_client
+      vars:
+        vpn_name: "wg_trusted"
+        # vpn_name: "wg_restricted"
+        client_ip: "10.0.0.2"
+        client_name: "My new client"
+        # keepalive: true

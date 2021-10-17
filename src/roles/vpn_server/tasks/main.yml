@@ -1,0 +1,47 @@
+# Update wireguard public peer configuration
+# The configuration is stored separately, encrypted with ansible-vault.
+#
+# Example of server-side VPN configuration:
+# [Interface]
+# Address = 10.0.0.1/16
+# PreUp = ufw allow 51234/udp
+# PostUp = ufw route allow in on wg0 out on wg0
+# PreDown = ufw route delete allow in on wg0 out on wg0
+# PostDown = ufw delete allow 51234/udp
+# ListenPort = 51234
+# PrivateKey = XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=
+# # Do not update config with running state upon shutdown
+# SaveConfig = false
+# MTU = 1280
+# 
+# # First Peer
+# [Peer]
+# PublicKey = YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=
+# AllowedIPs = 10.0.0.10/32
+#
+# Run with:
+# ansible-playbook -u $USER -K -i inventories/production.yml vpn_server.yml --ask-vault-pass
+---
+- name: Install Wireguard
+  apt:
+    name: wireguard
+    state: present
+    update_cache: yes
+
+- name: Update config
+  copy:
+    mode: 0600
+    owner: root
+    group: admin
+    dest: "/etc/wireguard/{{ vpn_name }}.conf"
+    content: "{{ lookup('file', '../../secrets/vpn/' + vpn_name + '.conf') }}\n"
+  notify:
+    - Sync wireguard config
+
+- name: Run as service
+  systemd:
+    name: wg-quick@{{ vpn_name }}
+    state: started
+    enabled: true
+
+# Adding new peers is done in a separate playbook
