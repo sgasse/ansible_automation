@@ -1,0 +1,4 @@
+---
+- name: Sync wireguard config
+  shell:
+    cmd: "bash -c 'wg syncconf {{ vpn_name }} <(wg-quick strip {{ vpn_name }})'"

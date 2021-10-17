@@ -1,5 +1,5 @@
 ---
-- hosts: raspberry_pis
+- hosts: raspberry_pis, vpn_server
   become: true
   tasks:
     - name: Load account data

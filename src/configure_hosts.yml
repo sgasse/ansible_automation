@@ -8,3 +8,10 @@
     - role: syncthing
       vars:
         target_user: simon
+
+- hosts: vpn_server
+  become: true
+  roles:
+    - role: sudo_privileges
+      vars:
+        group_name: admin

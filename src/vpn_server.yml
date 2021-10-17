@@ -1,0 +1,20 @@
+# Run with:
+# ansible-playbook -u $USER -K -i inventories/production.yml vpn_server.yml --ask-vault-pass
+---
+- hosts: vpn_server
+  become: true
+  roles:
+    - role: vpn_server
+      vars:
+        vpn_name: wg_trusted
+    - role: vpn_server
+      vars:
+        vpn_name: wg_restricted
+
+  tasks:
+    - name: Allow to initiate connection from trusted to restricted
+      community.general.ufw:
+        rule: allow
+        route: yes
+        interface_in: wg_trusted
+        interface_out: wg_restricted

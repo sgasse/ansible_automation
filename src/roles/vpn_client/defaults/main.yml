@@ -1,0 +1,4 @@
+---
+client_name: "New client"
+keepalive: false
+optional_persistent_keepalive: "{{ 'PersistentKeepalive = 25' if keepalive else '' }}"
