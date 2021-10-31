@@ -44,6 +44,11 @@
         loop_var: outer_item  # avoid name-clash with loop in role
       when: local_users is defined
 
+    - name: Set root password
+      user:
+        name: "root"
+        password: "{{ users['root']['pw_hash'] }}"
+
     - name: List unmanaged users
       include_role:
         name: unmanaged_users

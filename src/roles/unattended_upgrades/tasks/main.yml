@@ -1,0 +1,28 @@
+---
+- name: Install package for unattended upgrades
+  apt:
+    name: unattended-upgrades
+    state: present
+    update_cache: yes
+
+- name: Configure periodic updates
+  lineinfile:
+    path: "/etc/apt/apt.conf.d/10periodic"
+    regex: "{{ item[0] }}"
+    line: "{{ item[1] }}"
+  loop:
+    -
+      - APT::Periodic::Update-Package-Lists
+      - APT::Periodic::Update-Package-Lists "1";
+    -
+      - APT::Periodic::Download-Upgradeable-Packages
+      - APT::Periodic::Download-Upgradeable-Packages "1";
+    -
+      - APT::Periodic::Unattended-Upgrade
+      - APT::Periodic::Unattended-Upgrade "1";
+
+- name: Upgrade also regular packages
+  lineinfile:
+    path: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    regex: '^([\/]{2})?\s"\${distro_id}:\${distro_codename}-updates"'
+    line: '        "${distro_id}:${distro_codename}-updates";'

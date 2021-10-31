@@ -15,3 +15,5 @@
     - role: sudo_privileges
       vars:
         group_name: admin
+    - role: ssh_hardening
+    - role: unattended_upgrades
