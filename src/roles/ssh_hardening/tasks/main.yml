@@ -1,0 +1,10 @@
+---
+- name: Update sshd config
+  lineinfile:
+    regex: "{{ item[0] }}"
+    line: "{{ item[1] }}"
+    path: "/etc/ssh/sshd_config"
+  loop:
+    - ["^(#)?PasswordAuthentication", "PasswordAuthentication no"]
+    - ["^(#)?PermitRootLogin", "PermitRootLogin no"]
+    - ["^(#)?UsePAM yes", "UsePAM no"]
