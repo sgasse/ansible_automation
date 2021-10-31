@@ -1,0 +1,6 @@
+---
+- name: Upgrade pip
+  command:
+    cmd: "pip3 install --upgrade pip"
+  args:
+    executable: /bin/bash

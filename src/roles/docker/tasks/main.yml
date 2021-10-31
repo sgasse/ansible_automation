@@ -1,0 +1,19 @@
+---
+- name: Install docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Install pip3
+  apt:
+    name: python3-pip
+    state: present
+    update_cache: yes
+  notify:
+    - Upgrade pip
+
+- name: Install docker-compose via pip
+  pip:
+    name: docker-compose
+    state: present
