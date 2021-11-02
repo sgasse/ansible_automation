@@ -11,7 +11,7 @@
     comment: "{{ users[item]['name'] }}"
     uid: "{{ users[item]['uid'] }}"
     password: "{{ users[item]['pw_hash'] }}"
-    shell: /bin/bash
+    shell: "{{ users[item]['shell'] | default('/bin/bash') }}"
     group: "{{ primary_group }}"
     groups: "{{ user_groups }}"
     update_password: always

@@ -19,3 +19,4 @@
     - role: unattended_upgrades
     - role: ufw
     - role: docker
+    - role: deploy_sftp_server
