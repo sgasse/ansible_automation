@@ -1,0 +1,59 @@
+---
+- name: Ensure user exists
+  include_role:
+    name: user_accounts
+  vars:
+    user_names: "['gh_deploy']"
+    primary_group: "nogroup"
+    user_groups: "nogroup"
+
+- name: Create general jail 
+  file:
+    path: /jail
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Create sftp folder
+  file:
+    path: /jail/sftp
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create target directory for deploy user
+  file:
+    path: /jail/sftp/gh_deploy
+    state: directory
+    mode: 0700
+    owner: gh_deploy
+    group: nogroup
+
+- name: Create folders for deployments
+  file:
+    path: "/jail/sftp/gh_deploy/{{ item }}"
+    state: directory
+    mode: 0700
+    owner: gh_deploy
+    group: nogroup
+  loop:
+    - perspectives
+    - wasm_board_games
+
+- name: Restrict login for deploy user in SSH config
+  blockinfile:
+    path: "/etc/ssh/sshd_config"
+    marker_begin: "# BEGIN ANSIBLE MANAGED GH_DEPLOY USER"
+    marker_end: "# END ANSIBLE MANAGED GH_DEPLOY USER"
+    block: |
+      Match User gh_deploy
+      ForceCommand internal-sftp
+      ChrootDirectory /jail/sftp/
+      PermitTunnel no
+      AllowAgentForwarding no
+      AllowTcpForwarding no
+      X11Forwarding no
+  notify:
+    - Restart SSH server
