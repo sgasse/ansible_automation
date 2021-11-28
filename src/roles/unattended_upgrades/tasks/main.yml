@@ -7,7 +7,8 @@
 
 - name: Configure periodic updates
   lineinfile:
-    path: "/etc/apt/apt.conf.d/10periodic"
+    # File `50...` will be read after `10...` and override options
+    path: "/etc/apt/apt.conf.d/50unattended-upgrades"
     regex: "{{ item[0] }}"
     line: "{{ item[1] }}"
   loop:
@@ -21,8 +22,31 @@
       - APT::Periodic::Unattended-Upgrade
       - APT::Periodic::Unattended-Upgrade "1";
 
-- name: Upgrade also regular packages
+- name: Upgrade also regular packages  # noqa no-tabs
   lineinfile:
     path: "/etc/apt/apt.conf.d/50unattended-upgrades"
     regex: '^([\/]{2})?\s"\${distro_id}:\${distro_codename}-updates"'
-    line: '        "${distro_id}:${distro_codename}-updates";'
+    line: '	"${distro_id}:${distro_codename}-updates";'
+
+- name: Keep local files in the event of a conflict
+  blockinfile:
+    path: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    create: no
+    marker: "// {mark} ANSIBLE MANAGED Dpkg options"
+    block: |
+      Dpkg::Options {
+        "--force-confdef";
+        "--force-confold";
+      };
+
+- name: Enable automatic reboot
+  lineinfile:
+    path: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    regex: '^((\/){2})?Unattended-Upgrade::Automatic-Reboot "'
+    line: 'Unattended-Upgrade::Automatic-Reboot "{{ reboot }}";'
+
+- name: Configure time for automatic reboot
+  lineinfile:
+    path: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    regex: '^((\/){2})?Unattended-Upgrade::Automatic-Reboot-Time "'
+    line: 'Unattended-Upgrade::Automatic-Reboot-Time "04:00";'

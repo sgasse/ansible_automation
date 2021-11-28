@@ -17,6 +17,8 @@
         group_name: admin
     - role: ssh_hardening
     - role: unattended_upgrades
+      vars:
+        reboot: "1"
     - role: ufw
     - role: docker
     - role: deploy_sftp_server
